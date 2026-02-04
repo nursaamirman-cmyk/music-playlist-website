@@ -26,17 +26,33 @@ exports.registerUser = async (req, res) => {
   }
 };
 
+
 // Login  
 exports.loginUser = async (req, res) => {
-  const { email, password } = req.body;
-  const user = await User.findOne({ email });
+  try {
+    const { email, password } = req.body;
 
-  if (user && (await bcrypt.compare(password, user.password))) {
-    res.json({
-      _id: user._id,
-      token: generateToken(user._id)
-    });
-  } else {
-    res.status(401).json({ message: 'Invalid email or password' }); // Unauthorized
+    // Validation: checking whether the user sent any data at all
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Please provide email and password' });
+    }
+
+    //  Searching for the user by email
+    const user = await User.findOne({ email });
+
+    // Checking password
+    if (user && (await bcrypt.compare(password, user.password))) {
+      res.json({
+        _id: user._id,
+        username: user.username,
+        token: generateToken(user._id)
+      });
+    } else {
+      // If the user is not found or the password does not match, we send 401 errors
+      res.status(401).json({ message: 'Invalid email or password' });
+    }
+  } catch (error) {
+    // Generic server error
+    res.status(500).json({ message: 'Server Error' });
   }
 };
