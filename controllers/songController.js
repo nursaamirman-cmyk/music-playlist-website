@@ -28,7 +28,7 @@ if (iTunesResponse.data.results.length > 0) {
     const info = iTunesResponse.data.results[0];
     genre = info.primaryGenreName || genre;
     coverUrl = info.artworkUrl100 || coverUrl;
-    // Добавь эту переменную для аудио:
+    
     var previewUrl = info.previewUrl || ''; 
 }
     } catch (apiError) {
@@ -42,7 +42,7 @@ if (iTunesResponse.data.results.length > 0) {
     album,
     genre,
     coverUrl,
-    previewUrl, // Сохраняем ссылку на аудио
+    previewUrl, 
     user: req.user._id
 });
 
@@ -116,3 +116,4 @@ exports.deleteSong = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
