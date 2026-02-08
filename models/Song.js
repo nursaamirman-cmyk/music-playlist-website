@@ -6,6 +6,7 @@ const songSchema = new mongoose.Schema({
   album: { type: String },
   genre: { type: String }, 
   coverUrl: { type: String }, 
+  previewUrl: { type: String },
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 }, { timestamps: true });
 

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MusicFlow | Your Playlist </title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div id="app">
+        <div id="auth-container" class="container">
+            <div class="auth-card">
+                <h1 id="auth-title">Sign in MusicFlow</h1>
+                <form id="auth-form">
+                    <div class="input-group" id="username-group" style="display: none;">
+                        <input type="text" id="username" placeholder="Имя пользователя">
+                    </div>
+                    <div class="input-group">
+                        <input type="email" id="email" placeholder="Email" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" id="password" placeholder="Пароль" required>
+                    </div>
+                    <button type="submit" class="btn-primary" id="auth-btn">Sign in</button>
+                </form>
+                <p id="auth-toggle">Don't have an account? <span>Register</span></p>
+            </div>
+        </div>
+
+        <div id="main-container" class="container" style="display: none;">
+            <header>
+                <div class="logo"> MusicFlow</div>
+                <div class="user-info">
+                    <span id="display-username"></span>
+                    <button id="logout-btn" class="btn-icon"><i class="fas fa-sign-out-alt"></i></button>
+                </div>
+            </header>
+
+            <main>
+                <section class="add-song">
+                    <h3>Add New Song</h3>
+                    <form id="song-form">
+                        <input type="text" id="song-title" placeholder="Song Title" required>
+                        <input type="text" id="song-artist" placeholder="Artist" required>
+                        <input type="text" id="song-album" placeholder="Album">
+                        <button type="submit" class="btn-add"><i class="fas fa-plus"></i></button>
+                    </form>
+                </section>
+
+                <section class="playlist">
+                    <h3>Your Collection</h3>
+                    <div id="songs-grid" class="songs-grid">
+                        </div>
+                </section>
+            </main>
+        </div>
+    </div>
+    <div id="edit-modal" class="modal">
+    <div class="modal-content">
+        <h3>Edit Song</h3>
+        <input type="text" id="edit-title">
+        <input type="text" id="edit-artist">
+        <input type="text" id="edit-album">
+        <div class="modal-buttons">
+            <button onclick="closeEditModal()" class="btn-gray">Cancel</button>
+            <button id="save-edit-btn" class="btn-primary">Save</button>
+        </div>
+    </div>
+</div>
+    <script src="script.js"></script>
+</body>
+</html>

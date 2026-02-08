@@ -1,7 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
-
+const cors = require('cors');
 dotenv.config();
 
 // Connection to MongoDB
@@ -12,11 +12,11 @@ const app = express();
 // Middleware to read JSON 
 app.use(express.json());
 
+app.use(express.static('public'));
 // 1. Basic route
 app.get('/', (req, res) => {
   res.send('Music API is running...');
 });
-
 // 2. Connecting routes (API Endpoints)
 app.use('/api/auth', require('./routes/authRoutes'));       // Registration and Login
 app.use('/api/users', require('./routes/userRoutes'));      // User profile 
@@ -30,6 +30,8 @@ app.use((err, req, res, next) => {
     stack: process.env.NODE_ENV === 'production' ? null : err.stack,
   });
 });
+
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

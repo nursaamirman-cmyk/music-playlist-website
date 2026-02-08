@@ -20,28 +20,31 @@ exports.addSong = async (req, res) => {
 
     // Integration External API (iTunes)
     try {
-      const iTunesResponse = await axios.get(
-        `https://itunes.apple.com/search?term=${encodeURIComponent(title + ' ' + artist)}&limit=1`
-      );
+     const iTunesResponse = await axios.get(
+  `https://itunes.apple.com/search?term=${encodeURIComponent(title + ' ' + artist)}&entity=song&limit=1`
+);
 
-      if (iTunesResponse.data.results.length > 0) {
-        const info = iTunesResponse.data.results[0];
-        genre = info.primaryGenreName || genre;
-        coverUrl = info.artworkUrl100 || coverUrl;
-      }
+if (iTunesResponse.data.results.length > 0) {
+    const info = iTunesResponse.data.results[0];
+    genre = info.primaryGenreName || genre;
+    coverUrl = info.artworkUrl100 || coverUrl;
+    // Добавь эту переменную для аудио:
+    var previewUrl = info.previewUrl || ''; 
+}
     } catch (apiError) {
       console.error('External API Error:', apiError.message);
       // If the external API fails, we still create the song, just without the additional data.
     }
 
-    const song = await Song.create({
-      title,
-      artist,
-      album,
-      genre,    
-      coverUrl,  
-      user: req.user._id 
-    });
+ const song = await Song.create({
+    title,
+    artist,
+    album,
+    genre,
+    coverUrl,
+    previewUrl, // Сохраняем ссылку на аудио
+    user: req.user._id
+});
 
     res.status(201).json(song);
   } catch (error) {
