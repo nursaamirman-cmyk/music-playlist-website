@@ -1,7 +1,7 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-
+const { registerSchema } = require('../middleware/validator');
 // Generation of JWT Token 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' });
@@ -10,6 +10,10 @@ const generateToken = (id) => {
 // Registration of the User
 exports.registerUser = async (req, res) => {
   try {
+    const { error } = registerSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
     const { username, email, password } = req.body;
     const userExists = await User.findOne({ email });
 

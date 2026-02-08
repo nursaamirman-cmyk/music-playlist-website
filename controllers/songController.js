@@ -1,20 +1,45 @@
 const Song = require('../models/Song');
+const axios = require('axios'); 
+const { songSchema } = require('../middleware/validator');
 
 // Create a new song
 // POST /api/resource
 exports.addSong = async (req, res) => {
   try {
+    const { error } = songSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
     const { title, artist, album } = req.body;
-
-    // Data validation
     if (!title || !artist) {
       return res.status(400).json({ message: 'Please add a title and artist' });
+    }
+
+    let genre = 'Unknown';
+    let coverUrl = '';
+
+    // Integration External API (iTunes)
+    try {
+      const iTunesResponse = await axios.get(
+        `https://itunes.apple.com/search?term=${encodeURIComponent(title + ' ' + artist)}&limit=1`
+      );
+
+      if (iTunesResponse.data.results.length > 0) {
+        const info = iTunesResponse.data.results[0];
+        genre = info.primaryGenreName || genre;
+        coverUrl = info.artworkUrl100 || coverUrl;
+      }
+    } catch (apiError) {
+      console.error('External API Error:', apiError.message);
+      // If the external API fails, we still create the song, just without the additional data.
     }
 
     const song = await Song.create({
       title,
       artist,
       album,
+      genre,    
+      coverUrl,  
       user: req.user._id 
     });
 
