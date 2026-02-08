@@ -17,6 +17,7 @@ JWT_SECRET=Nursaya@@7
 Run the server:
 # Development mode
 npm run dev
+https://music-playlist-website-6jaj.onrender.com
 
 # Production mode
 npm start
